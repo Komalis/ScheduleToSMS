@@ -12,7 +12,7 @@ A l'aide de l'API de l'Application PushBullet, et de multiple requêtes GET et P
 # Les nécessaires
 
 
-*   L'application PushBullet sur votre téléphone.
+*   L'application PushBullet sur votre téléphone (Android only).
 *  	Un compte PushBullet.
-*	Un Access-Token pour la connexion sur votre compte PushBullet.
+*	Un Access-Token pour la connexion sur votre compte PushBullet (https://www.pushbullet.com/#settings).
 * 	Un accès à votre emploi du temps UVHC.
