@@ -5,9 +5,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
@@ -32,7 +29,6 @@ public class Utilisateur
 
 	public Utilisateur(String pseudonyme, String password, String accesstoken, String number)
 	{
-		CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL));
 		m_pseudonyme = pseudonyme;
 		m_password = password;
 		checkUVHC();
@@ -50,6 +46,7 @@ public class Utilisateur
 		m_useriden = jsonobject.getString("useriden");
 		m_deviceiden = jsonobject.getString("deviceiden");
 		m_number = jsonobject.getString("number");
+		checkUVHC();
 	}
 
 	public JsonObject toJson()

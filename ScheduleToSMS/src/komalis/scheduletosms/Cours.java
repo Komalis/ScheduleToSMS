@@ -29,6 +29,12 @@ public class Cours
 		m_salle = salle;
 	}
 
+	@Override
+	public String toString()
+	{
+		return this.m_id + " [" + this.m_type + "]\n" + this.m_prof + "\n" + this.m_salle + "\n" + this.m_horaire;
+	}
+	
 	public String getM_type()
 	{
 		return m_type;

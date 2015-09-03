@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.util.Scanner;
 
 import javax.json.Json;
@@ -17,6 +20,7 @@ public class Main
 
 	public static void main(String[] args)
 	{
+		CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL));
 		File f = new File("credits.txt");
 		if (f.exists() && !f.isDirectory())
 		{
