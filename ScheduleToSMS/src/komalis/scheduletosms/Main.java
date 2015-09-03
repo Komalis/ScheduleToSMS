@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Scanner;
 
 import javax.json.Json;
@@ -87,19 +89,22 @@ public class Main
 	public static void secondLaunch()
 	{
 		Utilisateur user = readSave();
+		Calendar date = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
 		int choix = 0;
-		while (choix != 5)
+		while (choix != 6)
 		{
 			choix = 0;
-			while (choix <= 0 || choix > 5)
+			while (choix <= 0 || choix > 6)
 			{
 				System.out.println("1) Lancer le système de message automatique");
 				System.out.println("2) Obtenir l'emploi du temps du jour par SMS");
 				System.out.println("3) Obtenir le prochain cours par SMS");
 				System.out.println("4) Reset des informations utilisateurs");
-				System.out.println("5) Quitter");
+				System.out.println("5) Changer la date");
+				System.out.println("6) Quitter");
 				System.out.print("\nChoix: ");
 				choix = sc.nextInt();
 			}
@@ -108,7 +113,7 @@ public class Main
 				case 1:
 					break;
 				case 2:
-					Journee journee = new Journee();
+					Journee journee = new Journee(date);
 					SMS sms = new SMS(user, journee.toString());
 					sms.sendSMS();
 					break;
@@ -119,6 +124,8 @@ public class Main
 					secondLaunch();
 					break;
 				case 5:
+					break;
+				case 6:
 					break;
 
 			}

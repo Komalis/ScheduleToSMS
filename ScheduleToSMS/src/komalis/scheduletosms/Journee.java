@@ -19,11 +19,11 @@ public class Journee
 	private ArrayList<Cours> m_cours;
 	private Calendar m_date;
 
-	public Journee()
+	public Journee(Calendar date)
 	{
 		try
 		{
-			m_date = Calendar.getInstance();
+			m_date = date;
 			refreshJournee();
 		}
 		catch (IOException e)
@@ -143,13 +143,13 @@ public class Journee
 		{
 			source += cours + "\n\n";
 		}
-		if(source.length() == 0)
+		if(m_cours.size() == 0)
 		{
 			source = "Pas de cours aujourd'hui!";
 		}
 		else
 		{
-			source.substring(0, source.length() - 2);
+			source = source.substring(0, source.length() - 2);
 		}
 		return source;
 	}
