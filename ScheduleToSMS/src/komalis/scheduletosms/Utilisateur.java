@@ -63,11 +63,24 @@ public class Utilisateur
 			connection.setRequestProperty("X-Requested-With", "XMLHttpRequest");
 			connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0");
 			connection.setRequestProperty("Access-Token", m_accesstoken);
-			InputStream responseStream = connection.getInputStream();
-			InputStreamReader responseStreamReader = new InputStreamReader(responseStream, "UTF-8");
-			JsonReader jsonreader = Json.createReader(responseStreamReader);
-			JsonObject jsonobject = jsonreader.readObject();
-			setM_useriden(jsonobject.getString("iden"));
+			int responseCode = connection.getResponseCode();
+			if (responseCode != 200)
+			{
+				System.out.println("Access-Token incorrect");
+				@SuppressWarnings("resource")
+				Scanner sc = new Scanner(System.in);
+				System.out.print("[PushBullet] Access-Token: ");
+				setM_accesstoken(sc.nextLine());
+				getUserIden();
+			}
+			else
+			{
+				InputStream responseStream = connection.getInputStream();
+				InputStreamReader responseStreamReader = new InputStreamReader(responseStream, "UTF-8");
+				JsonReader jsonreader = Json.createReader(responseStreamReader);
+				JsonObject jsonobject = jsonreader.readObject();
+				setM_useriden(jsonobject.getString("iden"));
+			}
 		}
 		catch (MalformedURLException e)
 		{
