@@ -1,7 +1,5 @@
 package komalis.scheduletosms;
 
-
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -12,6 +10,7 @@ import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,8 +21,6 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
 import javax.net.ssl.HttpsURLConnection;
-
-import org.apache.commons.lang3.StringEscapeUtils;
 
 public class Utilisateur
 {
@@ -72,7 +69,7 @@ public class Utilisateur
 
 	private void checkUVHC()
 	{
-		
+
 		try
 		{
 			CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL));
@@ -83,7 +80,7 @@ public class Utilisateur
 			connection.setRequestProperty("X-Requested-With", "XMLHttpRequest");
 			connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0");
 			connection.setDoOutput(true);
-			String postData = "username=" + StringEscapeUtils.escapeHtml4(this.getM_pseudonyme()) + "&password=" + StringEscapeUtils.escapeHtml4(this.getM_password()) + "&lt=" + getLTUVHC() + "&_eventId=submit&submit=Connexion";
+			String postData = "username=" + URLEncoder.encode(this.getM_pseudonyme(), "UTF-8") + "&password=" + URLEncoder.encode(this.getM_password(), "UTF-8") + "&lt=" + getLTUVHC() + "&_eventId=submit&submit=Connexion";
 			DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
 			wr.write(postData.getBytes("UTF-8"));
 			wr.flush();
