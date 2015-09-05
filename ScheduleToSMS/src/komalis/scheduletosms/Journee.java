@@ -40,6 +40,7 @@ public class Journee
 		connection.setRequestProperty("Accept-Language", "fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3");
 		connection.setRequestProperty("X-Requested-With", "XMLHttpRequest");
 		connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0");
+		connection.setRequestProperty("Cookie", Utilisateur.getM_cookie());
 		InputStream responseStream = connection.getInputStream();
 		InputStreamReader responseStreamReader = new InputStreamReader(responseStream, "UTF-8");
 		BufferedReader responseReader = new BufferedReader(responseStreamReader);
@@ -59,7 +60,7 @@ public class Journee
 		connection.setRequestProperty("Accept-Language", "fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3");
 		connection.setRequestProperty("X-Requested-With", "XMLHttpRequest");
 		connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0");
-
+		connection.setRequestProperty("Cookie", Utilisateur.getM_cookie());
 		connection.setDoOutput(true);
 		DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
 		wr.write(textPost.getBytes("UTF-8"));

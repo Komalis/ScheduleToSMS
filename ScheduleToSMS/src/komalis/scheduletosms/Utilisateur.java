@@ -30,6 +30,7 @@ public class Utilisateur
 	private String m_useriden;
 	private String m_deviceiden;
 	private String m_number;
+	private static String m_cookie;
 
 	public Utilisateur(String pseudonyme, String password, String accesstoken, String number)
 	{
@@ -50,7 +51,7 @@ public class Utilisateur
 		m_useriden = jsonobject.getString("useriden");
 		m_deviceiden = jsonobject.getString("deviceiden");
 		m_number = jsonobject.getString("number");
-		checkUVHC();
+		m_cookie = jsonobject.getString("cookie");
 	}
 
 	public JsonObject toJson()
@@ -63,16 +64,18 @@ public class Utilisateur
 		jsonobjectbuilder.add("useriden", m_useriden);
 		jsonobjectbuilder.add("deviceiden", m_deviceiden);
 		jsonobjectbuilder.add("number", m_number);
+		jsonobjectbuilder.add("cookie", m_cookie);
 		jsonobject = jsonobjectbuilder.build();
 		return jsonobject;
 	}
 
 	private void checkUVHC()
 	{
-
+		CookieManager cm = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
+		CookieHandler.setDefault(cm);
 		try
 		{
-			CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL));
+
 			HttpsURLConnection connection = (HttpsURLConnection) new URL("https://cas.univ-valenciennes.fr/cas/login").openConnection();
 			connection.setRequestMethod("POST");
 			connection.setRequestProperty("Accept-Charset", "gzip, deflate");
@@ -101,22 +104,42 @@ public class Utilisateur
 			Matcher matcher = pattern.matcher(response);
 			if (!matcher.find())
 			{
-				@SuppressWarnings("resource")
-				Scanner sc = new Scanner(System.in);
-				System.out.println("\nMauvais couple pseudonyme/password...\n");
-				System.out.print("[UVHC] Pseudonyme: ");
-				this.m_pseudonyme = sc.nextLine();
-				System.out.print("[UVHC] Password: ");
-				this.m_password = sc.nextLine();
-				checkUVHC();
+				Pattern p = Pattern.compile("Votre compte est verrouillé, veuillez patienter quelques secondes.");
+				Matcher m = p.matcher(response);
+				if (m.find())
+				{
+					System.out.println("Votre compte est verrouillé, veuillez patienter quelques minutes.");
+					System.out.println("Programme mis en repos pour 5 minutes");
+					Thread.sleep(300000);
+				}
+				else
+				{
+					@SuppressWarnings("resource")
+					Scanner sc = new Scanner(System.in);
+					System.out.println("\nMauvais couple pseudonyme/password...\n");
+					System.out.print("[UVHC] Pseudonyme: ");
+					this.m_pseudonyme = sc.nextLine();
+					System.out.print("[UVHC] Password: ");
+					this.m_password = sc.nextLine();
+					checkUVHC();
+				}
 			}
 			in.close();
 			get("https://vtmob.univ-valenciennes.fr/esup-vtclient-up4/stylesheets/mobile/welcome.xhtml");
+			String cookies = cm.getCookieStore().getCookies().toString();
+			cookies = cookies.replaceAll(",", ";");
+			cookies = cookies.substring(1, cookies.length() - 1);
+			m_cookie = cookies;
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
+		System.out.println(cm.getCookieStore().getCookies().toString());
 	}
 
 	private String getLTUVHC() throws IOException
@@ -138,6 +161,7 @@ public class Utilisateur
 		connection.setRequestProperty("Accept-Language", "fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3");
 		connection.setRequestProperty("X-Requested-With", "XMLHttpRequest");
 		connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0");
+		connection.setRequestProperty("Cookie", m_cookie);
 		InputStream responseStream = connection.getInputStream();
 		InputStreamReader responseStreamReader = new InputStreamReader(responseStream, "UTF-8");
 		BufferedReader responseReader = new BufferedReader(responseStreamReader);
@@ -289,4 +313,13 @@ public class Utilisateur
 		this.m_number = m_number;
 	}
 
+	public static String getM_cookie()
+	{
+		return m_cookie;
+	}
+
+	public static void setM_cookie(String m_cookie)
+	{
+		Utilisateur.m_cookie = m_cookie;
+	}
 }
