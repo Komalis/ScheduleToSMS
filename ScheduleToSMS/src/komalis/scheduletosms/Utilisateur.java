@@ -1,5 +1,7 @@
 package komalis.scheduletosms;
 
+
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -68,6 +70,7 @@ public class Utilisateur
 
 	private void checkUVHC()
 	{
+		
 		try
 		{
 			CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL));
