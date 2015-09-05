@@ -5,6 +5,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
@@ -67,6 +70,7 @@ public class Utilisateur
 	{
 		try
 		{
+			CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL));
 			HttpsURLConnection connection = (HttpsURLConnection) new URL("https://cas.univ-valenciennes.fr/cas/login").openConnection();
 			connection.setRequestMethod("POST");
 			connection.setRequestProperty("Accept-Charset", "gzip, deflate");

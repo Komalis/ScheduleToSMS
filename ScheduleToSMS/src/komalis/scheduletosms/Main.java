@@ -24,7 +24,6 @@ public class Main
 
 	public static void main(String[] args)
 	{
-		CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL));
 		File f = new File("credits.txt");
 		if (f.exists() && !f.isDirectory())
 		{
