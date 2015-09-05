@@ -28,8 +28,9 @@ public class Utilisateur
 	private String m_accesstoken;
 	private String m_useriden;
 	private String m_deviceiden;
+	private String m_number;
 
-	public Utilisateur(String pseudonyme, String password, String accesstoken)
+	public Utilisateur(String pseudonyme, String password, String accesstoken, String number)
 	{
 		CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL));
 		m_pseudonyme = pseudonyme;
@@ -38,6 +39,7 @@ public class Utilisateur
 		m_accesstoken = accesstoken;
 		getUserIden();
 		getDeviceIden();
+		m_number = number;
 	}
 
 	public Utilisateur(JsonObject jsonobject)
@@ -47,6 +49,7 @@ public class Utilisateur
 		m_accesstoken = jsonobject.getString("accesstoken");
 		m_useriden = jsonobject.getString("useriden");
 		m_deviceiden = jsonobject.getString("deviceiden");
+		m_number = jsonobject.getString("number");
 	}
 
 	public JsonObject toJson()
@@ -58,6 +61,7 @@ public class Utilisateur
 		jsonobjectbuilder.add("accesstoken", m_accesstoken);
 		jsonobjectbuilder.add("useriden", m_useriden);
 		jsonobjectbuilder.add("deviceiden", m_deviceiden);
+		jsonobjectbuilder.add("number", m_number);
 		jsonobject = jsonobjectbuilder.build();
 		return jsonobject;
 	}
@@ -92,7 +96,7 @@ public class Utilisateur
 			}
 			Pattern pattern = Pattern.compile("Connexion réussie");
 			Matcher matcher = pattern.matcher(response);
-			if(!matcher.find())
+			if (!matcher.find())
 			{
 				@SuppressWarnings("resource")
 				Scanner sc = new Scanner(System.in);
@@ -104,6 +108,7 @@ public class Utilisateur
 				checkUVHC();
 			}
 			in.close();
+			get("https://vtmob.univ-valenciennes.fr/esup-vtclient-up4/stylesheets/mobile/welcome.xhtml");
 		}
 		catch (IOException e)
 		{
@@ -121,7 +126,7 @@ public class Utilisateur
 		lt = m.group(1);
 		return lt;
 	}
-	
+
 	private String get(String textURL) throws IOException
 	{
 		String source = null;
@@ -270,4 +275,15 @@ public class Utilisateur
 	{
 		this.m_deviceiden = m_deviceiden;
 	}
+
+	public String getM_number()
+	{
+		return m_number;
+	}
+
+	public void setM_number(String m_number)
+	{
+		this.m_number = m_number;
+	}
+
 }

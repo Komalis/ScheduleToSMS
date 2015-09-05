@@ -31,7 +31,7 @@ public class Main
 
 	public static void firstLaunch()
 	{
-		String pseudonyme, password, accesstoken;
+		String pseudonyme, password, accesstoken, number;
 		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
 		System.out.print("[UVHC] Pseudonyme: ");
@@ -40,7 +40,9 @@ public class Main
 		password = sc.nextLine();
 		System.out.print("[PushBullet] Access-Token: ");
 		accesstoken = sc.nextLine();
-		Utilisateur user = new Utilisateur(pseudonyme, password, accesstoken);
+		System.out.print("[User] Telephone Number: ");
+		number = sc.nextLine();
+		Utilisateur user = new Utilisateur(pseudonyme, password, accesstoken, number);
 		try
 		{
 			FileWriter fw = new FileWriter("credits.txt");
@@ -84,30 +86,38 @@ public class Main
 		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
 		int choix = 0;
-		while (choix <= 0 || choix > 5)
+		while (choix != 5)
 		{
-			System.out.println("1) Lancer le système de message automatique");
-			System.out.println("2) Obtenir l'emploi du temps du jour par SMS");
-			System.out.println("3) Obtenir le prochain cours par SMS");
-			System.out.println("4) Reset des informations utilisateurs");
-			System.out.println("5) Quitter");
-			System.out.print("\nChoix: ");
-			choix = sc.nextInt();
-		}
-		switch (choix)
-		{
-			case 1:
-				break;
-			case 2:
-				break;
-			case 3:
-				break;
-			case 4:
-				firstLaunch();
-				secondLaunch();
-				break;
-			case 5:
-				break;
+			choix = 0;
+			while (choix <= 0 || choix > 5)
+			{
+				System.out.println("1) Lancer le système de message automatique");
+				System.out.println("2) Obtenir l'emploi du temps du jour par SMS");
+				System.out.println("3) Obtenir le prochain cours par SMS");
+				System.out.println("4) Reset des informations utilisateurs");
+				System.out.println("5) Quitter");
+				System.out.print("\nChoix: ");
+				choix = sc.nextInt();
+			}
+			switch (choix)
+			{
+				case 1:
+					break;
+				case 2:
+					Journee journee = new Journee();
+					SMS sms = new SMS(user, journee.toString());
+					sms.sendSMS();
+					break;
+				case 3:
+					break;
+				case 4:
+					firstLaunch();
+					secondLaunch();
+					break;
+				case 5:
+					break;
+
+			}
 		}
 	}
 }
