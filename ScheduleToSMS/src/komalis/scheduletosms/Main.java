@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Scanner;
 
 import javax.json.Json;
@@ -85,12 +87,36 @@ public class Main
 		}
 		return user;
 	}
+	
+	public static Date setDate()
+	{
+		@SuppressWarnings("resource")
+		Scanner sc = new Scanner(System.in);
+		boolean goodDate = false;
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		Date date = null;
+		while (!goodDate)
+		{
+			try
+			{
+				System.out.print("\nEntrer une date (dd/MM/yyyy): ");
+				String dateString = sc.nextLine();
+				date = sdf.parse(dateString);
+				goodDate = true;
+			}
+			catch (ParseException e)
+			{
+				goodDate = false;
+				System.out.println("\nLa date doit être du format dd/MM/yyyy\n");
+			}
+		}
+		return date;
+	}
 
 	public static void secondLaunch()
 	{
 		Utilisateur user = readSave();
 		Calendar date = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
 		int choix = 0;
@@ -124,6 +150,7 @@ public class Main
 					secondLaunch();
 					break;
 				case 5:
+					date.setTime(setDate());
 					break;
 				case 6:
 					break;
