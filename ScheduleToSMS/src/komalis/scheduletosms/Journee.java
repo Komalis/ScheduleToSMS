@@ -51,7 +51,7 @@ public class Journee
 		return source;
 	}
 
-	public static void post(String textURL, String textPost) throws IOException
+	private void post(String textURL, String textPost) throws IOException
 	{
 		HttpsURLConnection connection = (HttpsURLConnection) new URL(textURL).openConnection();
 		connection.setRequestMethod("POST");
