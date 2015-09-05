@@ -17,5 +17,5 @@ A l'aide de l'API de l'Application PushBullet, et de multiple requêtes GET et P
 *	Un Access-Token pour la connexion sur votre compte PushBullet (https://www.pushbullet.com/#settings).
 * 	Un accès à votre emploi du temps UVHC.
 
-# Informations importante
+# Informations importantes
 Un fichier credits.txt est crée après avoir rentrer vos informations d'identification, il contient votre nom d'utilisateur, votre mot de passe et votre Access-Token, faite attention avec ce fichier!
