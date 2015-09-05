@@ -23,6 +23,8 @@ import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
 import javax.net.ssl.HttpsURLConnection;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 public class Utilisateur
 {
 	private String m_pseudonyme;
@@ -81,7 +83,7 @@ public class Utilisateur
 			connection.setRequestProperty("X-Requested-With", "XMLHttpRequest");
 			connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0");
 			connection.setDoOutput(true);
-			String postData = "username=" + this.getM_pseudonyme() + "&password=" + this.getM_password() + "&lt=" + getLTUVHC() + "&_eventId=submit&submit=Connexion";
+			String postData = "username=" + StringEscapeUtils.escapeHtml4(this.getM_pseudonyme()) + "&password=" + StringEscapeUtils.escapeHtml4(this.getM_password()) + "&lt=" + getLTUVHC() + "&_eventId=submit&submit=Connexion";
 			DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
 			wr.write(postData.getBytes("UTF-8"));
 			wr.flush();
