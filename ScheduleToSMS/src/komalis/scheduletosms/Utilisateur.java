@@ -52,6 +52,7 @@ public class Utilisateur
 		m_deviceiden = jsonobject.getString("deviceiden");
 		m_number = jsonobject.getString("number");
 		m_cookie = jsonobject.getString("cookie");
+		checkUVHC();
 	}
 
 	public JsonObject toJson()
@@ -108,9 +109,12 @@ public class Utilisateur
 				Matcher m = p.matcher(response);
 				if (m.find())
 				{
-					System.out.println("Votre compte est verrouillé, veuillez patienter quelques minutes.");
-					System.out.println("Programme mis en repos pour 5 minutes");
-					Thread.sleep(300000);
+					if(m_cookie == null)
+					{
+						System.out.println("Votre compte est verrouillé, veuillez patienter quelques minutes.");
+						System.out.println("Programme mis en repos pour 5 minutes");
+						Thread.sleep(300000);
+					}
 				}
 				else
 				{
@@ -124,12 +128,15 @@ public class Utilisateur
 					checkUVHC();
 				}
 			}
+			else
+			{
+				String cookies = cm.getCookieStore().getCookies().toString();
+				cookies = cookies.replaceAll(",", ";");
+				cookies = cookies.substring(1, cookies.length() - 1);
+				m_cookie = cookies;
+				get("https://vtmob.univ-valenciennes.fr/esup-vtclient-up4/stylesheets/mobile/welcome.xhtml");
+			}
 			in.close();
-			get("https://vtmob.univ-valenciennes.fr/esup-vtclient-up4/stylesheets/mobile/welcome.xhtml");
-			String cookies = cm.getCookieStore().getCookies().toString();
-			cookies = cookies.replaceAll(",", ";");
-			cookies = cookies.substring(1, cookies.length() - 1);
-			m_cookie = cookies;
 		}
 		catch (IOException e)
 		{
@@ -139,17 +146,31 @@ public class Utilisateur
 		{
 			e.printStackTrace();
 		}
-		System.out.println(cm.getCookieStore().getCookies().toString());
+		//System.out.println(cm.getCookieStore().getCookies().toString());
 	}
 
 	private String getLTUVHC() throws IOException
 	{
 		String lt = null;
-		String source = get("https://cas.univ-valenciennes.fr/cas/login");
+		String source = null;
+		HttpsURLConnection connection = (HttpsURLConnection) new URL("https://cas.univ-valenciennes.fr/cas/login").openConnection();
+		connection.setRequestProperty("Accept-Charset", "gzip, deflate");
+		connection.setRequestProperty("Accept-Language", "fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3");
+		connection.setRequestProperty("X-Requested-With", "XMLHttpRequest");
+		connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0");
+		InputStream responseStream = connection.getInputStream();
+		InputStreamReader responseStreamReader = new InputStreamReader(responseStream, "UTF-8");
+		BufferedReader responseReader = new BufferedReader(responseStreamReader);
+		for (String line; (line = responseReader.readLine()) != null;)
+		{
+			source += line + "\n";
+		}
 		Pattern p = Pattern.compile("type=\"hidden\" name=\"lt\" value=\"(.*)\"");
 		Matcher m = p.matcher(source);
-		m.find();
-		lt = m.group(1);
+		if (m.find())
+		{
+			lt = m.group(1);
+		}
 		return lt;
 	}
 
